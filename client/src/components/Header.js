@@ -1,91 +1,92 @@
 import React from "react";
-import {Navbar,Nav,Container, NavDropdown} from "react-bootstrap";
-import {LinkContainer} from "react-router-bootstrap"
-import {useDispatch,useSelector} from 'react-redux'
-import {logOut} from '../redux/actions/userActions'
+import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
+import { CART_RESET } from "../redux/types";
 
 const Header = () => {
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const cart = useSelector((state) => state.cart.cartItems)
+  let totalProductsInCart=0
+
+  totalProductsInCart = cart.reduce((acc, item) => acc + item.qty, 0)
 
 
-const history = useHistory()
 
-const dispatch = useDispatch()
-const userLogin = useSelector(state=>state.userLogin)
-const {userInfo} = userLogin 
-
-const logoutHandler = ()=>{
-
-  dispatch(logOut())
-  history.push('/')
-
-}
-
-
+  const logoutHandler = () => {
+    dispatch(logOut());
+    dispatch({type:CART_RESET})
+ 
+    history.push("/");
+  };
 
   return (
-  <header>
-    <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect>
-  <Container>
-    <LinkContainer to='/'>
-        <Navbar.Brand>eCommerce Shop</Navbar.Brand>
-  </LinkContainer>
-    
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ms-auto">
-      <LinkContainer to="/cart">
-      <Nav.Link><i className="fas fa-shopping-cart"></i>Cart</Nav.Link>
-      </LinkContainer>
+    <header>
 
-      {userInfo ? (<NavDropdown title={userInfo.name} id='username'>
-        <LinkContainer to='/profile'>
-          <NavDropdown.Item>
-            Profile
-          </NavDropdown.Item>
-        </LinkContainer>
-        
-        {userInfo && userInfo.isAdmin && 
-        (<>
-          <LinkContainer to='/admin/users'>
-          <NavDropdown.Item>
-            Users dashboard
-          </NavDropdown.Item>
-        </LinkContainer>
-            
-        <LinkContainer to='/admin/orders'>
-          <NavDropdown.Item>
-            Orders
-          </NavDropdown.Item>
-        </LinkContainer>
-        
-        <LinkContainer to='/admin/products'>
-          <NavDropdown.Item>
-            Products
-          </NavDropdown.Item>
-        </LinkContainer>
-        
-          </>
-        )}
-       
+      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+        <Container>
+          <LinkContainer to="/">
+            <Navbar.Brand>eCommerce Shop</Navbar.Brand>
+          </LinkContainer>
 
-        <NavDropdown.Item onClick={logoutHandler}>  
-          LogOut
-        </NavDropdown.Item>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto">
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <i className="fas fa-shopping-cart"></i> Cart
+               <Badge pill bg="danger" style={{position:'relative',bottom:7,left:2}}>
+                   {totalProductsInCart }
+                  </Badge>
+                </Nav.Link>
+              </LinkContainer>
 
-      </NavDropdown>) : (
-        <LinkContainer to="/login">
-           <Nav.Link><i className="fas fa-user"></i>Sign In</Nav.Link>
-        </LinkContainer>
-        
-      )}
-        
+              {userInfo ? (
+                <NavDropdown title={userInfo.name} id="username">
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
 
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
-  </header>);
+                  {userInfo && userInfo.isAdmin && (
+                    <>
+                      <LinkContainer to="/admin/users">
+                        <NavDropdown.Item>Users dashboard</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/orders">
+                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                      </LinkContainer>
+
+                      <LinkContainer to="/admin/products">
+                        <NavDropdown.Item>Products</NavDropdown.Item>
+                      </LinkContainer>
+                    </>
+                  )}
+
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    LogOut
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fas fa-user"></i>Sign In
+                  </Nav.Link>
+                </LinkContainer>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
+  );
 };
 
 export default Header;
