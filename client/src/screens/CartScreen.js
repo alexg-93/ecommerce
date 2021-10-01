@@ -13,8 +13,10 @@ import {
 } from "react-bootstrap";
 import { addToCart ,removeFromCart } from "../redux/actions/cartActions";
 
+import { CART_RESET } from "../redux/types";
 
 const CartScreen = ({ match, location, history }) => {
+
   const productId = match.params.id;
 
   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
@@ -23,6 +25,7 @@ const CartScreen = ({ match, location, history }) => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  
 
   useEffect(() => {
     if (productId) {
@@ -39,15 +42,19 @@ const CartScreen = ({ match, location, history }) => {
   };
 
   return (
+
     <Row>
       <Col md={8}>
         <h1>Shopping Cart</h1>
+     
+        {cartItems.length >0 && <Button variant="outline-danger" onClick={()=>{dispatch({type:CART_RESET}) && localStorage.setItem('cartItems',JSON.stringify([]))}}>Reset cart</Button>}
+
         {cartItems.length === 0 ? (
           <>
             <Message text={"Your cart is empty"} variant="danger"></Message>
           </>
         ) : (
-          <ListGroup variant="flush">
+          <ListGroup variant="flush" style={{marginTop:10}}>
             {cartItems.map((item) => (
               <ListGroup.Item key={item.product}>
                 <Row>
