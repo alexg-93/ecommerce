@@ -59,14 +59,10 @@ const ProductListScreen = ({ history }) => {
 
   const filterProductsHandler = (name) => {
       
-      
-     
-      name=name.toLowerCase();
-
       if(name!==''){
 
         let filteredProducts = products.filter(prod=>(
-          prod.name.toLowerCase().includes(name)
+          prod.name.toLowerCase().includes(name.toLowerCase())
           
         ))
   
