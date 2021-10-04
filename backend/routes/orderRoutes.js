@@ -16,7 +16,7 @@ router.route("/:id").get(protect,getOrderById);
 // @description : update single order status to paid
 router.route("/:id/pay").put(protect,isAdmin,updateOrderToPaid);
 
-// @description : update single order staus to delivered
+// @description : update single order status to delivered
 
 router.route("/:id/deliver").put(protect,isAdmin,updateOrderToDelivered)
 
