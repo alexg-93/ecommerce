@@ -106,3 +106,43 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 });
 
 
+// @description : fetch single product by id
+// @route :  action --> GET /api/product/:id
+// @access   Public
+export const getProductById = asyncHandler(async(req,res) =>{
+  const product = await Product.findById(req.params.id);
+  product ? res.json({
+        product
+      })
+    :
+   
+    res.status(404).json({
+     status: res.statusCode,
+     message :`Product not found for id = ${req.params.id}`
+
+    })
+})
+
+
+// @description : fetch all clients orders
+// @route :  action --> GET /api/orders
+// @access   Private/Admin
+export const getAllOrders = asyncHandler(async(req,res) =>{
+  const orders = await Order.find({}).populate('user','name _id','User');
+  if(orders){
+    res.json({
+      message: "Success fetching orders",
+      orders
+    });
+  }else{
+    res.status(404).json({
+      status: res.statusCode,
+      message: `Something went wrong`
+    })
+    throw new Error('Something went wrong')
+  }
+
+
+})
+
+
