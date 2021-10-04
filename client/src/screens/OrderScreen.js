@@ -11,7 +11,7 @@ import { getOrderDetails,payOrder , deliverOrder } from "../redux/actions/orderA
 import {ORDER_PAY_RESET,CART_RESET,ORDER_DETAILS_RESET ,ORDER_DELIVER_RESET} from '../redux/types'
 
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match ,history }) => {
 
   const orderID = match.params.id;
   const dispatch = useDispatch();
@@ -39,6 +39,11 @@ const OrderScreen = ({ match }) => {
   }
 
   useEffect(() => {
+
+    if(!userInfo){
+      history.push('/login')
+    }
+
     //Add dynamically paypal script
     const addPaypalScript = async () => {
       const { data: clientId } = await axios.get("/api/config/paypal");
@@ -208,7 +213,7 @@ const OrderScreen = ({ match }) => {
               </ListGroup.Item>
             )}
           
-          {userInfo.isAdmin && order_details.isPaid && !order_details.isDelivered &&
+          {userInfo && userInfo.isAdmin && order_details.isPaid && !order_details.isDelivered &&
           (<ListGroup>
           
             {loadingDeliver && <Loader/>}
