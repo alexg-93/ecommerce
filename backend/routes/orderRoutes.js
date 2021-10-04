@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router();
-import {addOrder,getOrderById,updateOrderToPaid,getMyOrders,getAllOrders} from '../controllers/OrderController.js'
+import {addOrder,getOrderById,updateOrderToPaid,getMyOrders,getAllOrders,updateOrderToDelivered} from '../controllers/OrderController.js'
 import {protect,isAdmin} from '../utils/authMiddleware.js'
 
 // @description : add order to /orders
@@ -14,8 +14,11 @@ router.route("/myorders").get(protect,getMyOrders);
 router.route("/:id").get(protect,getOrderById);
 
 // @description : update single order status to paid
-router.route("/:id/pay").put(protect,updateOrderToPaid);
+router.route("/:id/pay").put(protect,isAdmin,updateOrderToPaid);
 
+// @description : update single order staus to delivered
+
+router.route("/:id/deliver").put(protect,isAdmin,updateOrderToDelivered)
 
 
 
