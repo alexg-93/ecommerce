@@ -218,7 +218,7 @@ export const deliverOrder = (orderId) => async (dispatch,getState) => {
       const {
         userLogin:{userInfo}
       } = getState();
-
+     
       const config = {
         headers: {
           'Content-Type': "application/json",
@@ -226,9 +226,8 @@ export const deliverOrder = (orderId) => async (dispatch,getState) => {
         }
         }
        
-      const { data } = await axios.put(`/api/orders/${orderId}/deliver`,config);
+      const { data } = await axios.put(`/api/orders/${orderId}/deliver`,{},config);
       const {order} = data;
-    
       dispatch({
               type: ORDER_DELIVER_SUCCESS,
               payload: order
