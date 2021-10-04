@@ -17,6 +17,7 @@ import UserEditScreen from "./screens/UserEditScreen"
 import ProductListScreen from "./screens/ProductListScreen"
 import CreateProductScreen from "./screens/CreateProductScreen"
 import ProductEditScreen from "./screens/ProductEditScreen"
+import OrdersListScreen from './screens/OrdersListScreen'
 import { Container } from "react-bootstrap";
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -44,7 +45,7 @@ function App() {
             <Route path='/admin/products' component={ProductListScreen}/>
             <Route path='/admin/product/newproduct' component={CreateProductScreen}/>
             <Route path='/admin/product/:id/edit' component={ProductEditScreen}/>
-
+            <Route path='/admin/orders' component={OrdersListScreen}/>
          </Container>
         </main>
         <Footer />
