@@ -7,14 +7,16 @@ import Message from "../components/Message";
 import { Link } from "react-router-dom";
 import { PayPalButton } from "react-paypal-button-v2/lib/index";
 import axios from "axios";
-import { getOrderDetails,payOrder } from "../redux/actions/orderActions";
-import {ORDER_PAY_RESET,CART_RESET,ORDER_DETAILS_RESET} from '../redux/types'
+import { getOrderDetails,payOrder , deliverOrder } from "../redux/actions/orderActions";
+import {ORDER_PAY_RESET,CART_RESET,ORDER_DETAILS_RESET ,ORDER_DELIVER_RESET} from '../redux/types'
 
 
 const OrderScreen = ({ match }) => {
 
   const orderID = match.params.id;
   const dispatch = useDispatch();
+
+  const userInfo = useSelector(state=>state.userLogin.userInfo)
 
   const [sdkReady, setSdkReady] = useState(false)
 
@@ -23,6 +25,9 @@ const OrderScreen = ({ match }) => {
 
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliverReducer);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
   if (!loading && order_details) {
     const { orderItems } = order_details;
@@ -47,8 +52,9 @@ const OrderScreen = ({ match }) => {
       document.body.appendChild(script)
     };
 
-    if (!order_details || successPay || order_details._id !== orderID) {
+    if (!order_details || successPay || order_details._id !== orderID || successDeliver) {
       dispatch({type:ORDER_PAY_RESET})
+      dispatch({type:ORDER_DELIVER_RESET})
       dispatch(getOrderDetails(orderID));
      
     } else if (!order_details.isPaid) {
@@ -61,12 +67,16 @@ const OrderScreen = ({ match }) => {
     
     
 
-  }, [dispatch, orderID, successPay, order_details]);
+  }, [dispatch, orderID, successPay,successDeliver, order_details]);
 
 
   const successPaymentHandler = (paymentResult) =>{
       dispatch(payOrder(orderID,paymentResult))
-      dispatch({type:CART_RESET})
+      dispatch({type:CART_RESET})  
+  }
+
+  const deliverHandler = () =>{
+     dispatch(deliverOrder(orderID))
      
   }
 
@@ -94,7 +104,7 @@ const OrderScreen = ({ match }) => {
               {order_details.isDelivered ? (
                 <Message
                   variant="success"
-                  text={`Delivered on ${order_details.deliveredAt}`}
+                  text={`Delivered on ${order_details.deliveredAt.substring(0,16).replace("T0"," Time ")}`}
                 />
               ) : (
                 <Message variant="danger" text="Not Delivered" />
@@ -123,7 +133,7 @@ const OrderScreen = ({ match }) => {
               {order_details.isPaid ? (
                 <Message
                   variant="success"
-                  text={`Paid on ${order_details.paidAt}`}
+                  text={`Paid on ${order_details.paidAt.substring(0,16).replace("T0"," Time ")}`}
                 />
               ) : (
                 <Message variant="danger" text="Not Paid" />
@@ -197,7 +207,24 @@ const OrderScreen = ({ match }) => {
               
               </ListGroup.Item>
             )}
+          
+          {userInfo.isAdmin && order_details.isPaid && !order_details.isDelivered &&
+          (<ListGroup>
+          
+            {loadingDeliver && <Loader/>}
 
+            <ListGroup.Item>
+            <Button style={{width:'100%'}}
+                type="button"
+                variant='outline-success'
+                 className='btn btn-block'
+                onClick={deliverHandler}
+              ><i className="fas fa-truck"></i> Delivered</Button>
+            </ListGroup.Item>
+            
+          
+            
+          </ListGroup>)}
           </ListGroup>
         </Col>
       </Row>
