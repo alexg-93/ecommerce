@@ -8,27 +8,63 @@ import {
   Card,
   Button,
   Form,
+  FloatingLabel,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
 import { useDispatch, useSelector } from "react-redux";
-import { listProductDetails } from "../redux/actions/productActions";
+import {
+  listProductDetails,
+  createProductReview,
+} from "../redux/actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { PRODUCT_CREATE_RESET } from "../redux/types";
 
-const ProductScreen = ({ history,match }) => {
+const ProductScreen = ({ history, match }) => {
+
+  const productId = match.params.id
+
   const dispatch = useDispatch();
+
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const { userInfo } = userLogin;
+
   const productDetails = useSelector((state) => state.productDetails);
 
   const { loading, error, product } = productDetails;
 
+  const productCreateReview = useSelector(
+    (state) => state.productCreateReviewReducer
+  );
+
+  const { error: errorCreateReview, success: successCreateReview } =
+    productCreateReview;
+
   useEffect(() => {
+
+    if(successCreateReview){
+      setRating(0)
+      setComment("")
+      dispatch({type:PRODUCT_CREATE_RESET})
+    }
+
     dispatch(listProductDetails(match.params.id));
-  }, [dispatch, match]);
+
+  }, [dispatch, match,successCreateReview,errorCreateReview]);
 
   const [Quantity, setQuantity] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
-  const addToCartHandler = () =>{
-    history.push(`/cart/${match.params.id}?qty=${Quantity}`)
+  const addToCartHandler = () => {
+    history.push(`/cart/${match.params.id}?qty=${Quantity}`);
+  };
+
+  const createReviewHandler = (e) => {
+      e.preventDefault();
+      dispatch(createProductReview(productId,{rating,comment}))
+      dispatch({type:PRODUCT_CREATE_RESET})
   }
 
   return (
@@ -37,12 +73,8 @@ const ProductScreen = ({ history,match }) => {
         <Loader />
       ) : error ? (
         <Message variant="danger" text={error} />
-      ) : error ? (
-        <Message variant="danger" text={error} />
-      ) : error ? (
-        <Message variant="danger" text={error} />
       ) : (
-        <div>
+        <>
           <Link to="/" className="btn btn-light my-3">
             Go Back
           </Link>
@@ -119,7 +151,77 @@ const ProductScreen = ({ history,match }) => {
               </Card>
             </Col>
           </Row>
-        </div>
+
+          <Row>
+            <Col md={6}>
+              <h2>Reviews</h2>
+              {product.reviews.length === 0 && <Message text="No Reviews" />}
+              <ListGroup variant="flush">
+                {product.reviews.map((review) => (
+                  <ListGroup.Item key={review._id}>
+                    <strong>{review.name}</strong>
+                    <Rating value={review.rating} />
+                    {review.comment}
+                    <p>
+                      created at :{" "}
+                      {review.createdAt.substring(0, 10).replace("T", " ")}
+                    </p>
+                  </ListGroup.Item>
+                ))}
+
+                <ListGroup.Item>
+                  <h2>Leave a review</h2>
+                  {errorCreateReview && <Message variant='danger' text={errorCreateReview}/>}
+                  {userInfo ? (
+                    <Form onSubmit={createReviewHandler}>
+                    <Form.Label>Rating</Form.Label>
+                    <Form.Group controlId="rating">
+                       
+                          <Form.Control
+                          required={true}
+                            as='select'
+                            value={rating}
+                            onChange={(e)=>setRating(e.target.value)}
+                          >
+                          <option value=''>Select..</option>
+                          <option value='1'>1 Star</option>
+                          <option value='2'>2 Star</option>
+                          <option value='3'>3 Star</option>
+                          <option value='4'>4 Star</option>
+                          <option value='5'>5 Star</option>
+                        </Form.Control>
+                      </Form.Group>
+
+                      <Form.Group controlId="comment" className="mt-3">
+                        <FloatingLabel
+                          controlId="comment"
+                          label="comment"
+                        >
+                          <Form.Control
+                            required
+                            as="textarea"
+                            value={comment || ""}
+                            style={{ height: "100px" }}
+                            onChange={(e) => setComment(e.target.value)}
+                          />
+                        </FloatingLabel>
+                      </Form.Group>
+                      <Button type="submit" variant='success' className='mt-2'>Submit</Button>
+                    </Form>
+                  ) : (
+                    <Button
+                    type='submit'
+                      variant="outline-info"
+                      onClick={() => history.push("/login")}
+                    >
+                      Please Sign in to review
+                    </Button>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
+            </Col>
+          </Row>
+        </>
       )}
     </>
   );

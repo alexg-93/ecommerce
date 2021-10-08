@@ -54,7 +54,7 @@ const OrdersListScreen = ({ history }) => {
   const searchByUserNameHandler = (name) => {
       
       if(name!==''){
-        let filteredOrders = orders.filter(order=>(
+        let filteredOrders = allOrders.filter(order=>(
           order.user !== null && order.user.name.toLowerCase().includes(name.toLowerCase())
         ))
        setOrders(filteredOrders)
@@ -68,7 +68,7 @@ const OrdersListScreen = ({ history }) => {
    
   
       if(id!==''){
-        let foundOrder = orders.filter(order=>order._id.includes(id.toLowerCase()))
+        let foundOrder = allOrders.filter(order=>order._id.includes(id.toLowerCase()))
 
         if(foundOrder.length >0){
           setOrders(foundOrder)

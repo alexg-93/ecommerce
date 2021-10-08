@@ -32,17 +32,17 @@ const productSchema = new mongoose.Schema({
         required:true,
       
     },
-    reviews: [
-            {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review',
-        required: true
-            }
-            ],
+   //Child referencing
+   reviews: [
+    {
+     type:Object,
+      review: Review
+    },
+  ],
     rating:{
         type:Number,
         required:true,
-        defaut:0
+        default:0
       
     },
     numReviews:{

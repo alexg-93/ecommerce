@@ -1,6 +1,6 @@
 import express from 'express'
 import {protect,isAdmin} from '../utils/authMiddleware.js'
-import {getProducts,getProductById,deleteProduct,createProduct,updateProduct} from '../controllers/productController.js'
+import {getProducts,getProductById,deleteProduct,createProduct,updateProduct,createProductReview} from '../controllers/productController.js'
 
 const router = express.Router();
 
@@ -19,5 +19,8 @@ router.post('/',protect,isAdmin,createProduct)
 
 // @description : update product by id
 router.put('/:id',protect,isAdmin,updateProduct)
+
+// @description : create new review for product
+router.post('/:id/reviews',protect,createProductReview)
 
 export default router

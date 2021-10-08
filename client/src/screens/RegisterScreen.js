@@ -43,13 +43,9 @@ const RegisterScreen = ({ location, history }) => {
     
     }
     else{
-        dispatch(register(name,email,password)) 
-    
+        dispatch(register(name,email,password))
     }
   
-     
-
-
       
 };
 
@@ -71,6 +67,7 @@ const RegisterScreen = ({ location, history }) => {
             placeholder="Enter name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required={true}
           ></Form.Control>
         </Form.Group>
 
