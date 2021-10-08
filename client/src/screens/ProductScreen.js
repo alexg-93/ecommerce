@@ -18,7 +18,7 @@ import {
 } from "../redux/actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { PRODUCT_CREATE_RESET } from "../redux/types";
+import { PRODUCT_CREATE_REVIEW_RESET } from "../redux/types";
 
 const ProductScreen = ({ history, match }) => {
 
@@ -46,7 +46,7 @@ const ProductScreen = ({ history, match }) => {
     if(successCreateReview){
       setRating(0)
       setComment("")
-      dispatch({type:PRODUCT_CREATE_RESET})
+      dispatch({type:PRODUCT_CREATE_REVIEW_RESET})
     }
 
     dispatch(listProductDetails(match.params.id));
@@ -64,7 +64,7 @@ const ProductScreen = ({ history, match }) => {
   const createReviewHandler = (e) => {
       e.preventDefault();
       dispatch(createProductReview(productId,{rating,comment}))
-      dispatch({type:PRODUCT_CREATE_RESET})
+      dispatch({type:PRODUCT_CREATE_REVIEW_RESET})
   }
 
   return (
