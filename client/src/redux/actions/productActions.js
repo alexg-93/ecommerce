@@ -192,7 +192,7 @@ export const editProduct = (product) => async (dispatch,getState) => {
 export const createProductReview = (productId,review) => async (dispatch,getState) => {
   try {
     dispatch({
-      type: PRODUCT_CREATE_REQUEST
+      type: PRODUCT_CREATE_REVIEW_REQUEST
     });
 
     const { userLogin:{userInfo} } = getState()
@@ -210,12 +210,12 @@ export const createProductReview = (productId,review) => async (dispatch,getStat
       );
       
         dispatch({
-          type: PRODUCT_CREATE_SUCCESS,
+          type: PRODUCT_CREATE_REVIEW_SUCCESS,
         });
  
   } catch (error) {
     dispatch({
-        type: PRODUCT_CREATE_FAIL,
+        type: PRODUCT_CREATE_REVIEW_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message

@@ -46,6 +46,7 @@ function App() {
             <Route path='/admin/product/newproduct' component={CreateProductScreen}/>
             <Route path='/admin/product/:id/edit' component={ProductEditScreen}/>
             <Route path='/admin/orders' component={OrdersListScreen}/>
+            <Route path='/search/:keyword' component={HomeScreen}/>
          </Container>
         </main>
         <Footer />
