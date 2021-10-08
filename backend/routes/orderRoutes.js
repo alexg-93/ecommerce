@@ -5,7 +5,7 @@ import {protect,isAdmin} from '../utils/authMiddleware.js'
 
 // @description : add order to /orders
 router.route('/')
-.post(protect,isAdmin,addOrder)
+.post(protect,addOrder)
 .get(protect,isAdmin,getAllOrders)
 // @description : get logged in user orders
 router.route("/myorders").get(protect,getMyOrders);
@@ -14,7 +14,7 @@ router.route("/myorders").get(protect,getMyOrders);
 router.route("/:id").get(protect,getOrderById);
 
 // @description : update single order status to paid
-router.route("/:id/pay").put(protect,isAdmin,updateOrderToPaid);
+router.route("/:id/pay").put(protect,updateOrderToPaid);
 
 // @description : update single order status to delivered
 
