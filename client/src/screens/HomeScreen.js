@@ -9,6 +9,7 @@ import {useDispatch,useSelector} from 'react-redux'
 const HomeScreen = ({match}) => {
 
     const keywordSearch = match.params.keyword
+    const pageNumber = match.params.pageNumber || 1
 
     
     const dispatch = useDispatch()
@@ -16,8 +17,8 @@ const HomeScreen = ({match}) => {
     const {loading,error,products} = productListReducer;
 
     useEffect(() => {
-        dispatch(listProducts(keywordSearch))
-    },[dispatch,keywordSearch])
+        dispatch(listProducts(keywordSearch,pageNumber))
+    },[dispatch,keywordSearch,pageNumber])
 
     return (
         <>

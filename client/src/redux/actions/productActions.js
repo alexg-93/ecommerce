@@ -28,10 +28,10 @@ import {
 import axios from "axios";
 
 
-export const listProducts = (keyword='') => async (dispatch) => {
+export const listProducts = (keyword='' , pageNumber = '') => async (dispatch) => {
     dispatch({type: PRODUCT_LIST_REQUEST})
     try {
-    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
+    const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
     
     if(data.products){
         dispatch({
