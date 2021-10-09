@@ -191,6 +191,23 @@ export const createProductReview = asyncHandler(async(req,res) =>{
 })
 
 
+// @description : get top rated products
+// @route :  action --> GET /api/products/top
+// @access : public
+export const getTopRatedProducts = asyncHandler(async(req,res) =>{
+
+  const products = await Product.find({}).sort({rating: -1}).limit(3)
+  
+  if(products){
+    res.status(200).json({
+      message: 'success',
+      products
+    })
+  }else{
+    throw Error('Products not found')
+  }
+
+})
 
 
 

@@ -23,6 +23,9 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
 
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
+  PRODUCT_TOP_FAIL,
 
 } from "../types";
 import axios from "axios";
@@ -224,6 +227,30 @@ export const createProductReview = (productId,review) => async (dispatch,getStat
   }
 };
 
+export const listTopRatedProducts = () => async (dispatch) => {
+  dispatch({type: PRODUCT_TOP_REQUEST})
+  try {
+  const { data } = await axios.get(`/api/products/top`);
+
+  if(data){
+      dispatch({
+          type: PRODUCT_TOP_SUCCESS,
+          payload: data,
+        });
+      
+  }else{
+      dispatch({
+          type:PRODUCT_TOP_FAIL,
+          payload:`Error : ${data.message} statusCode ${data.statusCode}`
+      })
+  }
+} catch (error) {
+    dispatch({
+        type:PRODUCT_TOP_FAIL,
+        payload: error.response && error.response.data.message ? error.response.data.message : error.message
+    })
+}
+};
 
 
   
