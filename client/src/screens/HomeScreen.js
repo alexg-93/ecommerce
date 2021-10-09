@@ -3,8 +3,10 @@ import {Row,Col} from 'react-bootstrap'
 import Product from '../components/Product'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Paginate from '../components/Paginate'
 import {listProducts} from '../redux/actions/productActions'
 import {useDispatch,useSelector} from 'react-redux'
+
 
 const HomeScreen = ({match}) => {
 
@@ -14,7 +16,7 @@ const HomeScreen = ({match}) => {
     
     const dispatch = useDispatch()
     const productListReducer = useSelector(state=>state.productListReducer)
-    const {loading,error,products} = productListReducer;
+    const {loading,error,products,page,pages} = productListReducer;
 
     useEffect(() => {
         dispatch(listProducts(keywordSearch,pageNumber))
@@ -22,10 +24,10 @@ const HomeScreen = ({match}) => {
 
     return (
         <>
-           
+        
            { loading ? <Loader/> : error ? <Message variant='danger' text={error}/>:
 
-           
+        <>
             <Row>
             <h1>Latest Products</h1>
                 { products && products.map(product=>(
@@ -36,12 +38,11 @@ const HomeScreen = ({match}) => {
 
                 )}
             </Row>
+            <Paginate pages={pages} page={page} keyword={keywordSearch ? keywordSearch : '' }/>
+        </>
            }
            
-            
-
-           
-           
+ 
         </>
     )
 }
