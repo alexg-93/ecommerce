@@ -19,6 +19,7 @@ import {
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { PRODUCT_CREATE_REVIEW_RESET } from "../redux/types";
+import {Helmet} from 'react-helmet'
 
 const ProductScreen = ({ history, match }) => {
 
@@ -69,6 +70,12 @@ const ProductScreen = ({ history, match }) => {
 
   return (
     <>
+       <Helmet>
+         <title>
+           {product.name}
+         </title>
+       </Helmet>
+
       {loading ? (
         <Loader />
       ) : error ? (

@@ -7,6 +7,7 @@ import Paginate from "../components/Paginate";
 import { listProducts } from "../redux/actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import CarouselProducts from "../components/CarouselProducts";
+import {Helmet} from 'react-helmet'
 
 const HomeScreen = ({ match }) => {
   const keywordSearch = match.params.keyword;
@@ -22,6 +23,12 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
+       <Helmet>
+         <title>
+           Welcome to eCommerce Shop | Home
+         </title>
+       </Helmet>
+
       {loading ? (
         <Loader />
       ) : error ? (
@@ -48,11 +55,14 @@ const HomeScreen = ({ match }) => {
                 </Col>
               ))}
           </Row>
+          <Row style={{position: "relative",left:'50%'}}> 
           <Paginate
             pages={pages}
             page={page}
             keyword={keywordSearch ? keywordSearch : ""}
           />
+          </Row>
+        
         </>
       )}
     </>
