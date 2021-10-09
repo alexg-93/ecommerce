@@ -55,7 +55,7 @@ const HomeScreen = ({ match }) => {
                 </Col>
               ))}
           </Row>
-          <Row style={{position: "relative",left:'50%'}}> 
+          <Row style={{position: "relative",left:'50%' ,width:200}} > 
           <Paginate
             pages={pages}
             page={page}
