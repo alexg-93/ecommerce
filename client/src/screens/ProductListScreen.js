@@ -1,4 +1,4 @@
-import React, { useEffect , useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -11,10 +11,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-import { listProducts ,deleteProduct} from "../redux/actions/productActions";
+import { listProducts, deleteProduct } from "../redux/actions/productActions";
 import { LinkContainer } from "react-router-bootstrap";
+import Paginate from "../components/Paginate";
 
-const ProductListScreen = ({ history }) => {
+const ProductListScreen = ({ history , match }) => {
+
+  const pageNumber = match.params.pageNumber || 1
 
   const dispatch = useDispatch();
 
@@ -24,59 +27,41 @@ const ProductListScreen = ({ history }) => {
 
   const productListReducer = useSelector((state) => state.productListReducer);
 
-  const { loading, error, products:productList } = productListReducer;
+  const { loading, error, products: productList , page , pages } = productListReducer;
 
-  const [products,setProducts] = useState([])
+  const [products, setProducts] = useState([]);
 
-  
   const productDelete = useSelector((state) => state.productDelete);
 
-  const { success: successDelete , error:errorDelete } = productDelete;
-
- 
+  const { success: successDelete, error: errorDelete } = productDelete;
 
   useEffect(() => {
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-      
+      dispatch(listProducts('',pageNumber));
     } else {
       history.push("/login");
     }
- 
-  }, [dispatch, history, userInfo,successDelete]);
+  }, [dispatch, history, userInfo, successDelete,pageNumber]);
 
-  
-   useEffect(() => {
-    setProducts(productList)
-   },[productList])
-  
-  
+  useEffect(() => {
+    setProducts(productList);
+  }, [productList]);
 
-   
   const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id))
+    dispatch(deleteProduct(id));
   };
 
   const filterProductsHandler = (name) => {
-      
-      if(name!==''){
+    if (name !== "") {
+      let filteredProducts = products.filter((prod) =>
+        prod.name.toLowerCase().includes(name.toLowerCase())
+      );
 
-        let filteredProducts = products.filter(prod=>(
-          prod.name.toLowerCase().includes(name.toLowerCase())
-          
-        ))
-  
-        setProducts(filteredProducts)
-      }else{
-       
-        setProducts(productList)
-     
-      }
-     
-     
-     
-   
-  }
+      setProducts(filteredProducts);
+    } else {
+      setProducts(productList);
+    }
+  };
 
   return (
     <>
@@ -86,28 +71,29 @@ const ProductListScreen = ({ history }) => {
         </Col>
         <Col>
           <InputGroup>
-            <FormControl placeholder="Search product" onChange={(e)=>filterProductsHandler(e.target.value)}/>
+            <FormControl
+              placeholder="Search product"
+              onChange={(e) => filterProductsHandler(e.target.value)}
+            />
           </InputGroup>
         </Col>
         <Col className="text-right">
-        <LinkContainer to={`/admin/product/newproduct`}>
-         <Button className="my-3">
-            <i className="fas fa-plus"></i> Create Product
-          </Button>    
-        </LinkContainer>
-         
+          <LinkContainer to={`/admin/product/newproduct`}>
+            <Button className="my-3">
+              <i className="fas fa-plus"></i> Create Product
+            </Button>
+          </LinkContainer>
         </Col>
       </Row>
 
       {loading ? (
         <Loader />
-      ) : error ? (<Message variant="danger" text={error} />) 
-       :
-      errorDelete ? (
+      ) : error ? (
+        <Message variant="danger" text={error} />
+      ) : errorDelete ? (
         <Message variant="danger" text={errorDelete} />
-      ) 
-      :
-      (
+      ) : (
+        <>
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
@@ -122,44 +108,47 @@ const ProductListScreen = ({ history }) => {
             </tr>
           </thead>
           <tbody>
-            { products && products.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>
-                  <Image
-                    src={product.image}
-                    style={{ width: "200px", height: "150px" }}
-                    thumbnail
-                    alt="product-img"
-                  />
-                </td>
-                <td>{product.name}</td>
-                <td>{product.brand}</td>
-                <td>{product.category}</td>
-                <td>${product.price}</td>
-                <td>{product.countInStock}</td>
-                <td>
-                <Col style={{display: "flex"}}>
-                <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button className="btn-sm" variant="light">
-                      <i className="fas fa-edit"></i>
-                    </Button>
-                  </LinkContainer>
-                  <Button
-                    className="btn-sm"
-                    variant="danger"
-                    style={{ marginLeft: "10px" }}
-                    onClick={() => deleteProductHandler(product._id)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </Button>
-                </Col>
-                  
-                </td>
-              </tr>
-            ))}
+            {products &&
+              products.map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>
+                    <Image
+                      src={product.image}
+                      style={{ width: "200px", height: "150px" }}
+                      thumbnail
+                      alt="product-img"
+                    />
+                  </td>
+                  <td>{product.name}</td>
+                  <td>{product.brand}</td>
+                  <td>{product.category}</td>
+                  <td>${product.price}</td>
+                  <td>{product.countInStock}</td>
+                  <td>
+                    <Col style={{ display: "flex" }}>
+                      <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                        <Button className="btn-sm" variant="light">
+                          <i className="fas fa-edit"></i>
+                        </Button>
+                      </LinkContainer>
+                      <Button
+                        className="btn-sm"
+                        variant="danger"
+                        style={{ marginLeft: "10px" }}
+                        onClick={() => deleteProductHandler(product._id)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </Button>
+                    </Col>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
+
+        <Paginate pages={pages} page={page} isAdmin={true}/>
+        </>
       )}
     </>
   );
