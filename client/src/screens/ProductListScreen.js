@@ -65,12 +65,11 @@ const ProductListScreen = ({ history , match }) => {
 
   return (
     <>
-      <Row className="align-items-center">
+      <h1>Products</h1>
+      <Row>
+        <div style={{display:'flex',alignItems: 'center',gap:10}} >
         <Col>
-          <h1>Products</h1>
-        </Col>
-        <Col>
-          <InputGroup>
+          <InputGroup className='w-100'>
             <FormControl
               placeholder="Search product"
               onChange={(e) => filterProductsHandler(e.target.value)}
@@ -84,6 +83,7 @@ const ProductListScreen = ({ history , match }) => {
             </Button>
           </LinkContainer>
         </Col>
+        </div>
       </Row>
 
       {loading ? (
