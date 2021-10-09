@@ -1,4 +1,4 @@
-import Order from "../models/OrderModel.js";
+import Order from "../models/orderModel.js";
 import asyncHandler from "express-async-handler";
 
 // @description : create new order
