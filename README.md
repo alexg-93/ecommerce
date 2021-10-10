@@ -23,6 +23,7 @@
 * Delete existing product
 * Update existing products
 * view orders
+* Update existing orders mark as delivered
 * view registered users
 * Grant admin permissions
 * Edit user details
