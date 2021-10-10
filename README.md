@@ -14,7 +14,7 @@
  * `MongoDB`
 
 ## `Test the website with admin dashboards`
- Username: admin@gmail.com
- Password: admin`
+ `Username: admin@gmail.com`
+`Password: admin`
  
  
