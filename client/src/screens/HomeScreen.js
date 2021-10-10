@@ -9,7 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import CarouselProducts from "../components/CarouselProducts";
 import {Helmet} from 'react-helmet'
 
+
 const HomeScreen = ({ match }) => {
+
+
+
   const keywordSearch = match.params.keyword;
   const pageNumber = match.params.pageNumber || 1;
 
@@ -18,7 +22,9 @@ const HomeScreen = ({ match }) => {
   const { loading, error, products, page, pages } = productListReducer;
 
   useEffect(() => {
+    
     dispatch(listProducts(keywordSearch, pageNumber));
+   
   }, [dispatch, keywordSearch, pageNumber]);
 
   return (
@@ -47,13 +53,21 @@ const HomeScreen = ({ match }) => {
           )}
 
           <Row>
-            <h1>Latest Products</h1>
-            {products &&
+            
+            {products && products.length > 0 ?
+          
               products.map((product) => (
                 <Col key={product._id} sm={12} md={6} lg={4} className="mb-3">
                   <Product product={product} />
                 </Col>
-              ))}
+              ))
+              : (
+                <Row className='w-50'>
+                <Message variant='danger' text={`no results for ${keywordSearch}`}/>
+                </Row>
+              
+                )
+            }
           </Row>
           <Row style={{position: "relative",left:'50%' ,width:200}} > 
           <Paginate
