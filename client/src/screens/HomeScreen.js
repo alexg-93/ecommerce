@@ -52,7 +52,7 @@ const HomeScreen = ({ match }) => {
             </Row>
           )}
 
-          <Row>
+          <Row className='mt-3'>
             
             {products && products.length > 0 ?
           
