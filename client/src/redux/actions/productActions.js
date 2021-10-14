@@ -34,12 +34,15 @@ import axios from "axios";
 export const listProducts = (keyword='' , pageNumber = '') => async (dispatch) => {
     dispatch({type: PRODUCT_LIST_REQUEST})
     try {
-    const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
+   const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
     
+  
+
     if(data.products){
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
-            payload: data.products,
+            payload: data.products, //products per current page
+           
           });
         
     }else{

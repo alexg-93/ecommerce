@@ -6,8 +6,6 @@ import { logOut } from "../redux/actions/userActions";
 import { useHistory } from "react-router-dom";
 import { CART_RESET } from "../redux/types";
 
-import {Route} from 'react-router-dom'
-import SearchBox from './SearchBox'
 
 const Header = () => {
   const history = useHistory();
@@ -37,11 +35,12 @@ const Header = () => {
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>eCommerce Shop</Navbar.Brand>
+          
           </LinkContainer>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-           <Route render={({history})=><SearchBox history={history}/>}/>
+          
             <Nav className="ms-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>
@@ -55,37 +54,41 @@ const Header = () => {
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to="/profile">
-                    <NavDropdown.Item>Profile</NavDropdown.Item>
+                    <NavDropdown.Item><i class="fas fa-user"></i> Profile</NavDropdown.Item>
                   </LinkContainer>
 
                   {userInfo && userInfo.isAdmin && (
                     <>
                       <LinkContainer to="/admin/users">
-                        <NavDropdown.Item>Users</NavDropdown.Item>
+                        <NavDropdown.Item><i class="fas fa-users"></i> Users</NavDropdown.Item>
                       </LinkContainer>
 
                       <LinkContainer to="/admin/orders">
-                        <NavDropdown.Item>Orders</NavDropdown.Item>
+                        <NavDropdown.Item><i class="fas fa-box"></i> Orders</NavDropdown.Item>
                       </LinkContainer>
 
                       <LinkContainer to="/admin/products">
-                        <NavDropdown.Item>Products</NavDropdown.Item>
+                        <NavDropdown.Item><i class="fas fa-store"></i> Products</NavDropdown.Item>
                       </LinkContainer>
                     </>
                   )}
 
                   <NavDropdown.Item onClick={logoutHandler}>
-                    LogOut
+                  <i class="fas fa-sign-out-alt"></i> LogOut
                   </NavDropdown.Item>
+                  
                 </NavDropdown>
+              
+                
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link>
-                    <i className="fas fa-user"></i>Sign In
+                  <i class="fas fa-sign-in-alt"></i> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}
             </Nav>
+          
           </Navbar.Collapse>
         </Container>
       </Navbar>

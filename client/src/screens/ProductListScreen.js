@@ -66,24 +66,24 @@ const ProductListScreen = ({ history , match }) => {
   return (
     <>
       <h1>Products</h1>
-      <Row>
-        <div style={{display:'flex',alignItems: 'center',gap:10}} >
+      <Row className="d-flex justify-content-center mb-4" md='auto'>
+        
         <Col>
-          <InputGroup className='w-100'>
+          <InputGroup >
             <FormControl
               placeholder="Search product"
               onChange={(e) => filterProductsHandler(e.target.value)}
             />
           </InputGroup>
         </Col>
-        <Col className="text-right">
+        <Col className="text-right" >
           <LinkContainer to={`/admin/product/newproduct`}>
-            <Button className="my-3">
+            <Button >
               <i className="fas fa-plus"></i> Create Product
             </Button>
           </LinkContainer>
         </Col>
-        </div>
+       
       </Row>
 
       {loading ? (
@@ -146,8 +146,9 @@ const ProductListScreen = ({ history , match }) => {
               ))}
           </tbody>
         </Table>
-
-        <Paginate pages={pages} page={page} isAdmin={true}/>
+        <Row className="d-grid justify-content-center" md="auto">   
+         <Paginate pages={pages} page={page} isAdmin={true} />
+        </Row>  
         </>
       )}
     </>

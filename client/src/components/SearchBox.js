@@ -21,12 +21,13 @@ const SearchBox = ({history}) => {
        <Form className=" d-flex mr-sm-2 ml-sm-2 mt-3" onSubmit={submitHandler}>
           <FormControl
             type="search"
-            placeholder="Search Product.."
+            placeholder="Search products"
             className="me-2"
             aria-label="Search"
             onChange={ (e)=>setKeyword(e.target.value)}
+           
           />
-          <Button variant="success" type='submit' className='p-2'>Search</Button>
+          <Button variant="outline-success" type='submit' className='p-2'>Search </Button>
         </Form>
     )
 }

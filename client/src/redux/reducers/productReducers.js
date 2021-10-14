@@ -42,6 +42,7 @@ export const productListReducer = (
       return {
         loading: false,
         products: action.payload.products,
+        allProducts: action.allProducts,
         pages: action.payload.pages,
         page: action.payload.page,
       };
