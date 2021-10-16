@@ -20,15 +20,16 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
   PRODUCT_CREATE_REVIEW_RESET,
-
-  PRODUCT_TOP_REQUEST ,
+  PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
-  PRODUCT_TOP_RESET 
+  PRODUCT_TOP_RESET,
 } from "../types";
 
+
+
 export const productListReducer = (
-  state = { products: [], loading: null, error: null },
+  state = { products: [], loading: null, error: null ,sort:''},
   action
 ) => {
   switch (action.type) {
@@ -40,15 +41,41 @@ export const productListReducer = (
       };
     case PRODUCT_LIST_SUCCESS:
       return {
+        sort:'',
         loading: false,
         products: action.payload.products,
-        allProducts: action.allProducts,
         pages: action.payload.pages,
         page: action.payload.page,
       };
 
     case PRODUCT_LIST_FAIL:
       return { loading: false, error: action.payload };
+    
+    case "SORT_ASC":
+      const sortAsc = action.payload.products.sort((a, b) =>
+        a.price > b.price ? 1 : -1
+      );
+      return {
+        ...state,
+        products: sortAsc,
+        pages: action.payload.pages,
+        page: action.payload.page,
+        sort: "asc",
+        loading: false,
+      };
+    case "SORT_DESC":
+      const sortDesc = action.payload.products.sort((a, b) =>
+        a.price < b.price ? 1 : -1
+      );
+
+      return {
+        ...state,
+        products: sortDesc,
+        pages: action.payload.pages,
+        page: action.payload.page,
+        sort: "desc",
+        loading: false,
+      };
 
     default:
       return state;
@@ -161,13 +188,11 @@ export const productTopRatedReducer = (
       return {
         loading: true,
         products: [],
-       
       };
     case PRODUCT_TOP_SUCCESS:
       return {
         loading: false,
         products: action.payload.products,
-       
       };
 
     case PRODUCT_TOP_FAIL:
@@ -177,3 +202,32 @@ export const productTopRatedReducer = (
       return state;
   }
 };
+
+// export const productSortReducer = (
+//   state = { products: [], sort: "" },
+//   action
+// ) => {
+//   switch (action.type) {
+//     case "SORT_ASC":
+//       const sortAsc = action.payload.sort((a, b) =>
+//         a.price > b.price ? 1 : -1
+//       );
+//       return {
+//         ...state,
+//         products: sortAsc,
+//         sort: "asc",
+//       };
+//     case 'SORT_DESC':
+//       const sortDesc = action.payload.sort((a, b) =>
+//         a.price < b.price ? 1 : -1
+//       );
+
+//       return {
+//         ...state,
+//         products: sortDesc,
+//         sort: "desc",
+//       };
+//     default:
+//       return state;
+//   }
+// };

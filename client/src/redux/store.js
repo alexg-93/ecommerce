@@ -8,7 +8,8 @@ import {
   productCreateReducer,
   productUpdateReducer ,
   productCreateReviewReducer,
-  productTopRatedReducer
+  productTopRatedReducer,
+  productSortReducer
 } from "../redux/reducers/productReducers.js";
 
 import { cartReducer } from "../redux/reducers/cartReducers.js";
@@ -34,6 +35,7 @@ import {
 
 import { filterReducer } from "./reducers/filterReducers.js";
 
+
 const reducer = combineReducers({
   productListReducer,
   productDetails: productDetailsReducer,
@@ -57,7 +59,8 @@ const reducer = combineReducers({
   usersList: usersListReducer,
   userDelete: userDeleteReducer,
 
-  filterReducer
+  filterReducer,
+
 });
 
 const cartItemFromLocalStorage = localStorage.getItem("cartItems")

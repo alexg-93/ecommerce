@@ -31,26 +31,36 @@ import {
 import axios from "axios";
 
 
-export const listProducts = (keyword='' , pageNumber = '') => async (dispatch) => {
-    dispatch({type: PRODUCT_LIST_REQUEST})
-    try {
-   const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
-    
-  
 
-    if(data.products){
-        dispatch({
-            type: PRODUCT_LIST_SUCCESS,
-            payload: data.products, //products per current page
-           
-          });
-        
-    }else{
-        dispatch({
-            type:PRODUCT_LIST_FAIL,
-            payload:`Error : ${data.message} statusCode ${data.statusCode}`
-        })
-    }
+export const listProducts = (keyword='' , pageNumber='',sort) => async (dispatch,getState) => {
+  
+    try {
+          if(sort===''){
+            dispatch({type: PRODUCT_LIST_REQUEST})
+            const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`);
+         
+            dispatch({
+              type: PRODUCT_LIST_SUCCESS,
+              payload: data.products, //products per current page
+             
+            });
+          }
+          else if(sort==='asc'){
+           const {productListReducer} = getState()
+           const products = productListReducer
+         
+           // const { productListReducer } = getState();
+            dispatch({ type:'SORT_ASC' , payload:  products});
+          }
+          else if(sort==='desc'){
+            const {productListReducer} = getState()
+            const products = productListReducer
+          //  const { productListReducer } = getState();
+            dispatch({ type:'SORT_DESC' , payload:  products});
+          }
+         
+          
+    
   } catch (error) {
       dispatch({
           type:PRODUCT_LIST_FAIL,
@@ -255,5 +265,17 @@ export const listTopRatedProducts = () => async (dispatch) => {
 }
 };
 
+
+// export const sortProductsAsc = () => (dispatch, getState) => {
+
+// 	const { productListReducer } = getState();
+// 	dispatch({ type:'SORT_ASC' , payload:  productListReducer.products});
+// };
+
+// export const sortProductsDesc = () => (dispatch, getState) => {
+
+// 	const {productListReducer } = getState();
+//   dispatch({ type:'SORT_DESC', payload: productListReducer.products });
+// };
 
   
