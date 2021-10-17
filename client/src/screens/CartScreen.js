@@ -13,6 +13,9 @@ import {
 } from "react-bootstrap";
 import { addToCart ,removeFromCart } from "../redux/actions/cartActions";
 
+import EmptyCartSvg from '../assets/EmptyCartSvg'
+
+
 import { CART_RESET } from "../redux/types";
 
 const CartScreen = ({ match, location, history }) => {
@@ -43,16 +46,17 @@ const CartScreen = ({ match, location, history }) => {
 
   return (
 
-    <Row>
+    <Row style={{display:'flex',justifyContent:'center'}}>
       <Col md={8}>
         <h1>Shopping Cart</h1>
      
         {cartItems.length >0 && <Button variant="outline-danger" onClick={()=>{dispatch({type:CART_RESET}) && localStorage.setItem('cartItems',JSON.stringify([]))}}>Reset cart</Button>}
 
         {cartItems.length === 0 ? (
-          <>
-            <Message text={"Your cart is empty"} variant="danger"></Message>
-          </>
+          <div style={{width:'100%',display:'grid',placeContent:'center'}} >
+            <Message text={"Your cart is empty"} variant="info"/>
+              <EmptyCartSvg width='300' height='300'/>
+          </div>
         ) : (
           <ListGroup variant="flush" style={{marginTop:10}}>
             {cartItems.map((item) => (
